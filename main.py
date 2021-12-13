@@ -57,14 +57,14 @@ def move():
             me_d = player_state["direction"]
             me_was_hit = player_state["wasHit"]
 
-        insert_rows.append({
-            'timestamp': ts,
-            'player': player_name,
-            **player_state,
-            })
+        #insert_rows.append({
+        #    'timestamp': ts,
+        #    'player': player_name,
+        #    **player_state,
+        #    })
 
 
-    executor.submit(client.insert_rows_json, table_name, insert_rows)
+    #executor.submit(client.insert_rows_json, table_name, insert_rows)
 
     if me_was_hit: # run!
         if random.random() < 0.3:
@@ -84,7 +84,7 @@ def move():
         if (me_x-1, me_y) in arena or (me_x-2, me_y) in arena or (me_x-2, me_y) in arena:
             return "T"
     
-    if random.random() < 0.1:
+    if random.random() < 0.2:
         return "F"
 
     return "R" # round turret
