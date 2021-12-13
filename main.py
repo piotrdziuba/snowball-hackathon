@@ -19,6 +19,7 @@ import random
 from flask import Flask, request
 from google.cloud import bigquery
 import datetime
+from concurrent.futures import ThreadPoolExecutor
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -27,6 +28,7 @@ app = Flask(__name__)
 moves = ['R', 'L', 'F']
 
 client = bigquery.Client()
+executor = ThreadPoolExecutor()
 table_name = "allegro-hackathon12-2186.battle_ds.events"
 
 @app.route("/", methods=['GET'])
@@ -62,7 +64,7 @@ def move():
             })
 
 
-    errors = client.insert_rows_json(table_name, insert_rows)
+    executor.submit(client.insert_rows_json, table_name, insert_rows)
 
     if me_was_hit: # run!
         if random.random() < 0.3:
