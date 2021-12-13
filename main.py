@@ -49,7 +49,8 @@ def move():
             me_was_hit = player_state["wasHit"]
 
     if me_was_hit: # run!
-        return "F"
+        if random.random() < 0.3:
+            return "F"
 
     # check if somebody is on the line
     if me_d == "N":
@@ -64,7 +65,9 @@ def move():
     else: 
         if (me_x-1, me_y) in arena or (me_x-2, me_y) in arena or (me_x-2, me_y) in arena:
             return "T"
-
+    
+    if random.random() < 0.1:
+        return "F"
 
     return "R" # round turret
 
