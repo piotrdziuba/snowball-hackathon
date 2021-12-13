@@ -46,6 +46,10 @@ def move():
             me_x = pos_x
             me_y = pos_y
             me_d = player_state["direction"]
+            me_was_hit = player_state["wasHit"]
+
+    if me_was_hit: # run!
+        return "F"
 
     # check if somebody is on the line
     if me_d == "N":
