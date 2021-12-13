@@ -55,14 +55,14 @@ def move():
             me_d = player_state["direction"]
             me_was_hit = player_state["wasHit"]
 
-   #     insert_rows.append({
-   #         'timestamp': ts,
-   #         'player': player_name,
-   #         **player_state,
-   #         })
+        insert_rows.append({
+            'timestamp': ts,
+            'player': player_name,
+            **player_state,
+            })
 
 
-    #errors = client.insert_rows_json(table_name, insert_rows)
+    errors = client.insert_rows_json(table_name, insert_rows)
 
     if me_was_hit: # run!
         if random.random() < 0.3:
