@@ -17,12 +17,17 @@ import os
 import logging
 import random
 from flask import Flask, request
+from google.cloud import bigquery
+import datetime
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 moves = ['R', 'L', 'F']
+
+client = bigquery.Client()
+table_name = "allegro-hackathon12-2186.battle_ds.events"
 
 @app.route("/", methods=['GET'])
 def index():
@@ -37,6 +42,8 @@ def move():
     dims_w = state["arena"]["dims"][0]
     dims_h = state["arena"]["dims"][1]
     arena = dict()
+    insert_rows = []
+    ts = datetime.datetime.now().timestamp()
     for player_name, player_state in state["arena"]["state"].items():
         pos_x = player_state["x"]
         pos_y = player_state["y"]
@@ -47,6 +54,15 @@ def move():
             me_y = pos_y
             me_d = player_state["direction"]
             me_was_hit = player_state["wasHit"]
+
+        insert_rows.append({
+            'timestamp': ts,
+            'player': player_name,
+            **player_state,
+            })
+
+
+    errors = client.insert_rows_json(table_name, insert_rows)
 
     if me_was_hit: # run!
         if random.random() < 0.3:
